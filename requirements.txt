@@ -1,0 +1,10 @@
+langchain
+langchain_community
+huggingface_hub
+sentence_transformers
+chromadb
+Cython
+tiktoken
+langchain-text-splitters
+faiss-cpu
+googletrans==3.1.0a0
