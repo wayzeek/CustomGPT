@@ -1,10 +1,15 @@
 import os
 import re
 from googletrans import Translator
-from data_processing import modify_pdf_content
-from data_loading import load_and_split_data
+from data_processing import load_and_split_data
 from model_management import save_to_file, load_from_file, index_and_load_model
 from langchain.chains.question_answering import load_qa_chain
+
+if not os.getenv("HF_KEY"):
+    hf_api_key = str(input("Please enter your Hugging Face API key: "))
+    os.environ["HF_KEY"] = hf_api_key
+else:
+    print("Hugging Face API key found.")
 
 indexed_data_file = '../save/indexed_data.pkl'
 model_file = '../save/model.pkl'
@@ -13,11 +18,7 @@ model_file = '../save/model.pkl'
 if not os.path.exists(indexed_data_file) or not os.path.exists(model_file):
     print("Indexed data or model not found.")
     raw_data_folder_path = "../raw_data/"
-    pdf_file_paths = [os.path.join(raw_data_folder_path, fn) for fn in os.listdir(raw_data_folder_path) if fn.endswith('.pdf')]
-    for pdf_path in pdf_file_paths:
-        modify_pdf_content(pdf_path)
-    pdf_folder_path = '../data/'
-    split_documents = load_and_split_data(pdf_folder_path)
+    split_documents = load_and_split_data(raw_data_folder_path)
     db, llm = index_and_load_model(split_documents)
     save_to_file(db, indexed_data_file)
     save_to_file(llm, model_file)
