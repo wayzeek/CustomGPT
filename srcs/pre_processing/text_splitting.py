@@ -30,7 +30,7 @@ def modify_pdf_content(pdf_path, headers_to_split_on):
                 replacement = f"{header_symbol} {header_title}"
                 text = re.sub(regex_pattern, replacement, text, flags=re.IGNORECASE)
             writer.addPage(page)
-        output_path = pdf_path.replace('raw_data', 'processed_data')
+        output_path = pdf_path.replace('data', '.processed_data')
         with open(output_path, 'wb') as output_pdf:
             writer.write(output_pdf)
 
@@ -80,12 +80,12 @@ def get_appropriated_splitter(pdf_name):
         else:
             headers_to_split_on = get_markdown_header_config(previous_headers)
         previous_headers = headers_to_split_on  # Store the current configuration for potential reuse
-        modify_pdf_content(os.path.abspath("raw_data/") + "/" + pdf_name, headers_to_split_on)
+        modify_pdf_content(os.path.abspath("data/") + "/" + pdf_name, headers_to_split_on)
         return MarkdownHeaderTextSplitter(
             headers_to_split_on=headers_to_split_on, 
             strip_headers=True)
     elif pdf_type == "no":
-        shutil.copy(os.path.abspath("raw_data/") + "/" + pdf_name, os.path.abspath("processed_data/") + "/" + pdf_name)
+        shutil.copy(os.path.abspath("data/") + "/" + pdf_name, os.path.abspath(".processed_data/") + "/" + pdf_name)
         chunk_chosen = None
         
         while chunk_chosen != 'sm' and chunk_chosen != 'md' and chunk_chosen != 'lg':
@@ -99,7 +99,7 @@ def get_appropriated_splitter(pdf_name):
         elif chunk_chosen == 'lg':
             chunk_size = 5000  
         
-        language = detect_language_from_pdf(os.path.abspath("processed_data/") + "/" + pdf_name)
+        language = detect_language_from_pdf(os.path.abspath(".processed_data/") + "/" + pdf_name)
         return SpacyTextSplitter(
             chunk_size=chunk_size,
             language=language
