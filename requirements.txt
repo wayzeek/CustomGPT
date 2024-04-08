@@ -7,4 +7,6 @@ Cython
 tiktoken
 langchain-text-splitters
 faiss-cpu
-googletrans==3.1.0a0
+deep-translator
+accelerate
+langchain_experimental
