@@ -3,7 +3,21 @@ import re
 import shutil
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import MarkdownHeaderTextSplitter, RecursiveCharacterTextSplitter
+from langchain.text_splitter import MarkdownHeaderTextSplitter
+from custom_splitters import SpacyTextSplitter
+from langdetect import detect
+
+def detect_language_from_pdf(pdf_path: str) -> str:
+    # Open the PDF file
+    with open(pdf_path, 'rb') as file:
+        reader = PdfFileReader(file)
+        text = ""
+        # Read the first 1000 characters from the PDF to sample the text
+        for page_num in range(min(10, reader.numPages)):
+            text += reader.getPage(page_num).extractText()
+        # Detect the language of the sampled text
+        language = detect(text)
+    return language
 
 def get_markdown_header_config(previous_headers=None):
     """
@@ -86,11 +100,24 @@ def get_appropriated_splitter(pdf_name):
             strip_headers=True)
     elif pdf_type == "no":
         shutil.copy("../raw_data/" + pdf_name, "../processed_data/" + pdf_name)
-        return RecursiveCharacterTextSplitter(
-            chunk_size=2000,
-            chunk_overlap=50,
-            length_function=len,
-            is_separator_regex=False,
+        chunk_chosen = None
+        
+        while chunk_chosen != 'sm' and chunk_chosen != 'md' and chunk_chosen != 'lg':
+            chunk_chosen = input("Choose the chunk size (sm/md/lg): ").strip().lower()
+            if chunk_chosen != 'sm' and chunk_chosen != 'md' and chunk_chosen != 'lg':
+                print("Please enter 'sm', 'md', or 'lg'.")
+        if chunk_chosen == 'sm':
+            chunk_size = 500
+        elif chunk_chosen == 'md':
+            chunk_size = 1500
+        elif chunk_chosen == 'lg':
+            chunk_size = 5000  
+        
+        language = detect_language_from_pdf("../processed_data/" + pdf_name)
+        print(f"Detected language: {language} for {pdf_name}")
+        return SpacyTextSplitter(
+            chunk_size=chunk_size,
+            language=language
         )
 
 def load_and_split_data(pdf_folder_path, log_path="log.txt"):
@@ -104,15 +131,19 @@ def load_and_split_data(pdf_folder_path, log_path="log.txt"):
         splitter = get_appropriated_splitter(pdf_name)
         loader = PyPDFLoader(os.path.join(processed_data_folder_path, pdf_name))
         pages = loader.load()
-        
+        if (type(splitter) == MarkdownHeaderTextSplitter):
+            pages_to_split = []
+            for page in pages:
+                splits = splitter.split_text(page.page_content)
+                pages_to_split.extend(splits)
+            language = detect_language_from_pdf("../processed_data/" + pdf_name)
+            print(f"Detected language: {language} for {pdf_name}")
+            splitter = SpacyTextSplitter(chunk_size=1000, language=language)
+            pages = pages_to_split
         document_splits = []  # To store splits for current document
         for page in pages:
             splits = splitter.split_text(page.page_content)
             document_splits.extend(splits)
-            for split in splits:
-                print("-----------------------------------")
-                print(split)
-                print("-----------------------------------")
         
         split_documents.extend(document_splits)
         print(f"Document {pdf_name} split.")
