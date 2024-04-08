@@ -1,49 +1,68 @@
 import os
-import re
+import getpass
 from pre_processing.pdf_processing import load_and_split_data
 from model_management import save_to_file, load_from_file, index_and_load_model
-from langchain.chains.question_answering import load_qa_chain
+from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
+from deep_translator import GoogleTranslator
+from aesthetic import clear_screen, print_banner, color_text
 
-if not os.getenv("HF_KEY"):
-    hf_api_key = str(input("Please enter your Hugging Face API key: "))
-    os.environ["HF_KEY"] = hf_api_key
-else:
-    print("Hugging Face API key found.")
+indexed_data_file = os.path.abspath(".saved_models/indexed_data.pkl")
+model_file = os.path.abspath(".saved_models/model.pkl")
 
-indexed_data_file = os.path.abspath("save/indexed_data.pkl")
-model_file = os.path.abspath("save/model.pkl")
-
+clear_screen()
+print_banner()
 # Check if indexed data and model files exist
 if not os.path.exists(indexed_data_file) or not os.path.exists(model_file):
-    print("Indexed data or model not found.")
+    print(color_text("Indexed data or model not found.", "red"))
     raw_data_folder_path = os.path.abspath("raw_data/")
     split_documents = load_and_split_data(raw_data_folder_path)
     db, llm = index_and_load_model(split_documents)
     save_to_file(db, indexed_data_file)
     save_to_file(llm, model_file)
 else:
-    print("Loading indexed data and model from files...")
+    print(color_text("Loading indexed data and model from files...", "yellow"))
     db = load_from_file(indexed_data_file)
     llm = load_from_file(model_file)
 
-chain = load_qa_chain(llm, chain_type="stuff")
-print("Chain created.")
+retriever = db.as_retriever()
+memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
+qa = ConversationalRetrievalChain.from_llm(
+    llm=llm,
+    retriever=retriever,
+    memory=memory,
+    return_source_documents=False,
+)
+
+chat_history = []
+
+answer_language = None
+while answer_language not in ['en', 'fr', 'es', 'de', 'it', 'uk', 'ru', 'zh', 'ja']:
+    answer_language = input(color_text("Enter the language code for the answer language (en, fr, es, de, it, uk, ru, zh, ja): ", "magenta")).strip().lower()
+    if answer_language not in ['en', 'fr', 'es', 'de', 'it', 'uk', 'ru', 'zh', 'ja']:
+        print(color_text("Please enter a valid language code.", "red"))
+
+nickname = color_text(getpass.getuser(), "yellow")
+ask_query = nickname + " : "
+clear_screen()
+print_banner()
 # Main loop for querying
 while True:
-    query = str(input("Enter your query: "))
-    docs = db.similarity_search(query)
-    print("Thinking...")
-    output = chain.invoke({"input_documents": docs, "question": query})
-
-    # Extract helpful answer from output
-    output_str = str(output)
-    match = re.search(r'Helpful Answer:(.*?)(\s*})', output_str)
-    if match:
-        helpful_answer = match.group(1).strip() # Extract the matched group and remove leading/trailing whitespace
-        helpful_answer = helpful_answer.rstrip("'")
-        helpful_answer = helpful_answer.rstrip('"')
-        
-        print(helpful_answer)
+    query = str(input(ask_query))
+    if answer_language != 'en':
+        query_processed = GoogleTranslator(source=answer_language, target='en').translate(query)
     else:
-        print("Aucune réponse utile trouvée.")
+        query_processed = query
+    chat_history.append(query_processed)
+    result = qa.invoke({"question": query_processed, "chat_history": chat_history})
+    
+    # Extract the helpful answer from the result
+    answer = result['answer']
+    
+    if answer_language != 'en':
+        answer = GoogleTranslator(source='auto', target=answer_language).translate(answer)
+    
+    chatbot_color = color_text("Chatbot", "magenta")
+    # Print the question and answer
+    print(f"\n{chatbot_color} : {answer}\n")

@@ -4,14 +4,15 @@ import os
 
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from langchain.text_splitter import MarkdownHeaderTextSplitter
-from custom_splitters import SpacyTextSplitter
-from language_detection import detect_language_from_pdf
+from pre_processing.custom_splitters import SpacyTextSplitter
+from pre_processing.language_detection import detect_language_from_pdf
+from aesthetic import color_text
 
 def modify_pdf_content(pdf_path, headers_to_split_on):
     """
     Modify PDF content by adding markdown headers based on user-defined configurations.
     """
-    print(f"Processing PDF: {pdf_path}")
+    print(color_text(f"Processing PDF: {pdf_path}", "yellow"))
     with open(pdf_path, 'rb') as file:
         pdf = PdfFileReader(file)
         writer = PdfFileWriter()
@@ -33,32 +34,30 @@ def modify_pdf_content(pdf_path, headers_to_split_on):
         with open(output_path, 'wb') as output_pdf:
             writer.write(output_pdf)
 
-    print(f"PDF processed and saved as {output_path}")
-
 def get_markdown_header_config(previous_headers=None):
     """
     Ask the user for the number of header levels and titles for each level, with an option to reuse previous configurations.
     """
     
     use_previous = None
-    header_levels = 1
+    header_levels = -1
     
     if previous_headers is not None:
         while use_previous != "yes" and use_previous != "no":
-            use_previous = input("Use the same header configuration as before? (yes/no): ").strip().lower()
+            use_previous = input(color_text("Use the same header configuration as before? (yes/no): ", "magenta")).strip().lower()
             if use_previous != "yes" and use_previous != "no":
-                print("Please enter 'yes' or 'no'.")
+                print(color_text("Please enter 'yes' or 'no'.", "red"))
         if use_previous == "yes":
             return previous_headers
     while header_levels <= 1 :
-        header_levels = int(input("How many levels of headers are there? "))
-        if header_levels >= 1:
-            print("Please enter a number greater than 1")
+        header_levels = int(input(color_text("How many levels of headers are there? ", "magenta")))
+        if header_levels <= 1:
+            print(color_text("Please enter a number greater than 1", "red"))
     headers_to_split_on = []
 
     for i in range(header_levels):
         header_symbol = "#" * (i + 1)  # Incrementing number of '#' symbols for each level
-        header_title = input(f"Enter the title for Header Level {i + 1} ({header_symbol}): ").strip()
+        header_title = input(color_text(f"Enter the title for Header Level {i + 1} ({header_symbol}): ", "magenta")).strip()
         headers_to_split_on.append((header_symbol, header_title))
 
     return headers_to_split_on
@@ -72,11 +71,10 @@ def get_appropriated_splitter(pdf_name):
 
     
     while (pdf_type != "yes") and (pdf_type != "no"):
-        pdf_type =  input(f"Is your file {pdf_name} structured by headers ? (yes/no): ").strip()
+        pdf_type =  input(color_text(f"Is your file {pdf_name} structured by headers ? (yes/no): ", "magenta")).strip()
         if pdf_type != "yes" and pdf_type != "no":
-            print("Please enter 'yes' or 'no'.")
+            print(color_text("Please enter 'yes' or 'no'.", "red"))
     if pdf_type == "yes":
-        print(f"\nConfiguring headers for: {pdf_name}")
         if previous_headers is None:
             headers_to_split_on = get_markdown_header_config()
         else:
@@ -91,9 +89,9 @@ def get_appropriated_splitter(pdf_name):
         chunk_chosen = None
         
         while chunk_chosen != 'sm' and chunk_chosen != 'md' and chunk_chosen != 'lg':
-            chunk_chosen = input("Choose the chunk size (sm/md/lg): ").strip().lower()
+            chunk_chosen = input(color_text("Choose the chunk size (sm/md/lg): ", "magenta")).strip().lower()
             if chunk_chosen != 'sm' and chunk_chosen != 'md' and chunk_chosen != 'lg':
-                print("Please enter 'sm', 'md', or 'lg'.")
+                print(color_text("Please enter 'sm', 'md', or 'lg'.", "red"))
         if chunk_chosen == 'sm':
             chunk_size = 500
         elif chunk_chosen == 'md':
@@ -102,7 +100,6 @@ def get_appropriated_splitter(pdf_name):
             chunk_size = 5000  
         
         language = detect_language_from_pdf(os.path.abspath("processed_data/") + "/" + pdf_name)
-        print(f"Detected language: {language} for {pdf_name}")
         return SpacyTextSplitter(
             chunk_size=chunk_size,
             language=language

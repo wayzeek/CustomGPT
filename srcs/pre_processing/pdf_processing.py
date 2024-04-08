@@ -2,9 +2,10 @@ import os
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import MarkdownHeaderTextSplitter
-from custom_splitters import SpacyTextSplitter
-from language_detection import detect_language_from_pdf
-from text_splitting import get_appropriated_splitter
+from pre_processing.custom_splitters import SpacyTextSplitter
+from pre_processing.language_detection import detect_language_from_pdf
+from pre_processing.text_splitting import get_appropriated_splitter
+from aesthetic import color_text
 
 def load_and_split_data(pdf_folder_path):
     """
@@ -23,7 +24,6 @@ def load_and_split_data(pdf_folder_path):
                 splits = splitter.split_text(page.page_content)
                 pages_to_split.extend(splits)
             language = detect_language_from_pdf(os.path.abspath("processed_data/") + "/" + pdf_name)
-            print(f"Detected language: {language} for {pdf_name}")
             splitter = SpacyTextSplitter(chunk_size=1000, language=language)
             pages = pages_to_split
         document_splits = []  # To store splits for current document
@@ -32,7 +32,5 @@ def load_and_split_data(pdf_folder_path):
             document_splits.extend(splits)
         
         split_documents.extend(document_splits)
-        print(f"Document {pdf_name} split.")
+        print(color_text(f"Document {pdf_name} split.", "green"))
     return split_documents
-
-load_and_split_data(os.path.abspath("raw_data/"))
