@@ -11,7 +11,7 @@ def load_and_split_data(pdf_folder_path):
     """
     Load and split data from PDFs in the specified folder and log details about how documents are split to a file.
     """
-    processed_data_folder_path = os.path.abspath("processed_data/") + "/"
+    processed_data_folder_path = os.path.abspath(".processed_data/") + "/"
     split_documents = []
 
     for pdf_name in os.listdir(pdf_folder_path):
@@ -23,7 +23,7 @@ def load_and_split_data(pdf_folder_path):
             for page in pages:
                 splits = splitter.split_text(page.page_content)
                 pages_to_split.extend(splits)
-            language = detect_language_from_pdf(os.path.abspath("processed_data/") + "/" + pdf_name)
+            language = detect_language_from_pdf(os.path.abspath(".processed_data/") + "/" + pdf_name)
             splitter = SpacyTextSplitter(chunk_size=1000, language=language)
             pages = pages_to_split
         document_splits = []  # To store splits for current document

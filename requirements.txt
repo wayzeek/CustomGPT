@@ -1,12 +1,11 @@
 langchain
 langchain_community
+langchain-text-splitters
 huggingface_hub
 sentence_transformers
-chromadb
 Cython
-tiktoken
-langchain-text-splitters
 faiss-cpu
-deep-translator
-accelerate
-langchain_experimental
+spacy
+spacy_language_detection
+deep_translator
+PyPDF2
