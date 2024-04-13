@@ -1,6 +1,7 @@
 import os
 import shutil
 import getpass
+import textwrap
 from pre_processing.pdf_processing import load_and_split_data
 from model_management import save_to_file, load_from_file, index_and_load_model
 from langchain.chains import ConversationalRetrievalChain
@@ -91,6 +92,10 @@ while True:
     if answer_language != 'en':
         answer = GoogleTranslator(source='auto', target=answer_language).translate(answer)
     
+    # Use textwrap to adjust the answer to fit terminal width
+    terminal_width = os.get_terminal_size().columns  # Get current terminal width
+    wrapped_answer = textwrap.fill(answer, width=terminal_width / 1.5)
+    
     chatbot_color = color_text("Chatbot", "magenta")
     # Print the question and answer
-    print(f"\n{chatbot_color} : {answer}\n")
+    print(f"\n{chatbot_color} : {wrapped_answer}\n")
