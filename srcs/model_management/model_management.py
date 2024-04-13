@@ -3,7 +3,7 @@ import os
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.llms.huggingface_endpoint import HuggingFaceEndpoint
-from aesthetic import color_text
+from utils.utils import color_text
 
 # Function to save an object to a file
 def save_to_file(obj, filename):
