@@ -1,11 +1,11 @@
 import os
 import getpass
 import textwrap
-from utils.utils import clear_screen, print_banner, color_text
+from srcs.utils.utils import clear_screen, print_banner, color_text
 from deep_translator import GoogleTranslator
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
-from data_management.data_management import check_and_load_data
+from srcs.data_management.data_management import check_and_load_data
 
 def chatbot_interface():
     clear_screen()

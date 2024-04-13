@@ -2,10 +2,10 @@ import os
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import MarkdownHeaderTextSplitter
-from pre_processing.custom_splitters import SpacyTextSplitter
-from pre_processing.language_detection import detect_language_from_pdf
-from pre_processing.text_splitting import get_appropriated_splitter
-from utils.utils import color_text
+from srcs.pre_processing.custom_splitters import SpacyTextSplitter
+from srcs.pre_processing.language_detection import detect_language_from_pdf
+from srcs.pre_processing.text_splitting import get_appropriated_splitter
+from srcs.utils.utils import color_text
 
 def load_and_split_data(pdf_folder_path):
     """
