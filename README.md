@@ -1,13 +1,12 @@
 # 🤖 CustomGPT - Chat with your Data 📚 
 
-CustomGPT is a multilingual chatbot platform designed to extract, process, and interact with text data from PDF documents, leveraging advanced NLP and machine learning models for rich, interactive communication.
+CustomGPT is a sophisticated, multilingual chatbot platform designed to streamline the extraction, processing, and interaction with text data from PDF documents. Leveraging advanced NLP and machine learning models, it enables rich, interactive communication across multiple languages, making it ideal for businesses and educational institutions dealing with diverse document formats.
 
 ## 📚 Table of Contents
 
 - [Introduction](#introduction)
 - [Features](#features)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
@@ -16,43 +15,64 @@ CustomGPT is a multilingual chatbot platform designed to extract, process, and i
 
 ## 📖 Introduction
 
-In an increasingly globalized world, the ability to quickly process and interact with multilingual textual content, especially from diverse document formats like PDFs, is crucial for businesses and educational entities. CustomGPT was developed to meet this need, providing a comprehensive solution that not only extracts and processes text but also facilitates dynamic interactions through a sophisticated chatbot interface. The motivation behind CustomGPT is to streamline the handling of document-based information and enhance user engagement through conversational AI, bridging the gap between static data and actionable insights.
+CustomGPT harnesses the power of conversational AI to enhance the way organizations handle document-based information. By automatically extracting and analyzing text from PDFs and facilitating dynamic interactions through its chatbot interface, CustomGPT transforms static data into actionable insights. This integration of document processing with advanced dialogue systems offers a unique solution that significantly boosts productivity and user engagement.
 
 ### Screenshot
-![upscaled-2x-Screenshot from 2024-04-13 20-57-24](https://github.com/wayzeek/CustomGPT/assets/112975047/52d9387c-a97f-45f7-813a-e30028c8a485)
+![image](https://github.com/wayzeek/CustomGPT/assets/112975047/4b5da2d6-a2ed-4043-965b-e603c493a5e8)
+
+
 
 ## ✨ Features
 
-- Bullet list of key features and benefits.
+- **PDF Text Extraction**: Efficiently extracts text from PDFs, handling multiple layouts and formats.
+- **Advanced Text Processing**: Employs custom splitters and robust language detection to ensure accurate text analysis.
+- **Multilingual Support**: Supports interaction in multiple languages with dedicated models:
+  - **English** 🇬🇧
+  - **Spanish** 🇪🇸
+  - **French** 🇫🇷
+  - **German** 🇩🇪
+  - **Italian** 🇮🇹
+  - **Ukrainian** 🇺🇦
+  - **Russian** 🇷🇺
+  - **Chinese** 🇨🇳
+  - **Japanese** 🇯🇵
+- **Interactive User Interface**: Offers a user-friendly command-line interface that may evolve into a more graphical interface.
 
 ## 🚀 Getting Started
 
-### Installation
-
+### ⚙️ Installation
+- **Step 1:** clone the repo
 ```bash
-Step 1: clone the repo
 git clone https://github.com/wayzeek/CustomGPT.git
-Step 2: navigate to the directory
+```
+- **Step 2:** navigate to the directory
+```bash
 cd CustomGPT
-Step 3: install dependencies
+```
+- **Step 3:** install dependencies
+```bash
 bash install.sh
-Step 4: move to virtual environment 
+```
+- **Step 4:** move to virtual environment
+```bash
 source .venv/bin/activate
-Step 5: start application
+```
+- **Step 5:** start application
+```bash
 python3 main.py 
 ```
 
 ## 🔍 Usage
 
 ### Process PDFs
-Step 1: add your PDFs to the data directory
-Step 2: launch application
+- **Step 1:** add your PDFs to the data directory
+- **Step 2:** launch application
 ```python
 python3 main.py
 ```
-Step 3: select if your PDFs is structures by Markdowns (Chapters, Titles, ...) or not
-Step 4: Choose the chunk size aka the average sizes of your paragraph
-Step 5: Wait & enjoy chating with your data !
+- **Step 3:** select if your PDFs is structures by Markdowns (Chapters, Titles, ...) or not
+- **Step 4:** Choose the chunk size aka the average sizes of your paragraph
+- **Step 5:** Wait & enjoy chating with your data !
 
 ## 🤝 Contributing
 
