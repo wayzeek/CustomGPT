@@ -88,6 +88,4 @@ This is a solo project made by [myself](https://github.com/wayzeek)
 
 ## ⚖️ License
 
-```
 MIT License - see the [LICENSE](LICENSE) file for details
-```
