@@ -34,7 +34,7 @@ class SpacyTextSplitter(TextSplitter):
             'ru': 'ru_core_news_sm',
             'zh': 'zh_core_web_sm',
             'ja': 'ja_core_news_sm',
-            'xx': 'xx_ent_wiki_sm' # Multi-language model
+            'xx': 'xx_ent_wiki_sm'
         }
         # Use the full model name if a language code is provided
         if language in language_model_map:
