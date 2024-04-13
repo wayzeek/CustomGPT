@@ -5,7 +5,7 @@ from langchain.text_splitter import MarkdownHeaderTextSplitter
 from pre_processing.custom_splitters import SpacyTextSplitter
 from pre_processing.language_detection import detect_language_from_pdf
 from pre_processing.text_splitting import get_appropriated_splitter
-from aesthetic import color_text
+from utils.utils import color_text
 
 def load_and_split_data(pdf_folder_path):
     """

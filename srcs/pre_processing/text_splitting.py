@@ -6,7 +6,7 @@ from PyPDF2 import PdfFileReader, PdfFileWriter
 from langchain.text_splitter import MarkdownHeaderTextSplitter
 from pre_processing.custom_splitters import SpacyTextSplitter
 from pre_processing.language_detection import detect_language_from_pdf
-from aesthetic import color_text
+from utils.utils import color_text
 
 def modify_pdf_content(pdf_path, headers_to_split_on):
     """
