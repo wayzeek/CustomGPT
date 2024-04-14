@@ -1,6 +1,7 @@
 # 🤖 CustomGPT - Chat with your Data 📚 
 
-CustomGPT is a sophisticated, multilingual chatbot platform designed to streamline the extraction, processing, and interaction with text data from PDF documents. Leveraging advanced NLP and machine learning models, it enables rich, interactive communication across multiple languages, making it ideal for businesses and educational institutions dealing with diverse document formats.
+CustomGPT is a *sophisticated*, **multilingual chatbot** designed to streamline the *extraction, processing, and interaction* with text data from **PDF documents**.\
+Leveraging *advanced NLP* and *machine learning models*, it enables *rich*, *interactive communication* across multiple languages, making it ideal for businesses, educational institutions or individuals dealing with diverse document formats.
 
 ## 📚 Table of Contents
 
@@ -15,18 +16,19 @@ CustomGPT is a sophisticated, multilingual chatbot platform designed to streamli
 
 ## 📖 Introduction
 
-CustomGPT harnesses the power of conversational AI to enhance the way organizations handle document-based information. By automatically extracting and analyzing text from PDFs and facilitating dynamic interactions through its chatbot interface, CustomGPT transforms static data into actionable insights. This integration of document processing with advanced dialogue systems offers a unique solution that significantly boosts productivity and user engagement.
+CustomGPT harnesses the power of *conversational AI* to enhance the way organizations or individuals handle document-based information.\
+By *automatically extracting* and *analyzing text from PDFs* and facilitating dynamic interactions through its chatbot interface, CustomGPT transforms static data into *actionable insights*. \
+This integration of document processing with advanced dialogue systems offers a *unique solution* that significantly *boosts productivity* and *user engagement*.
 
 ### Screenshot
-![image](https://github.com/wayzeek/CustomGPT/assets/112975047/4b5da2d6-a2ed-4043-965b-e603c493a5e8)
-
+![image](https://github.com/wayzeek/CustomGPT/assets/112975047/a8cb0a07-af4a-4971-b8d6-002fac673271)
 
 
 ## ✨ Features
 
-- **PDF Text Extraction**: Efficiently extracts text from PDFs, handling multiple layouts and formats.
-- **Advanced Text Processing**: Employs custom splitters and robust language detection to ensure accurate text analysis.
-- **Multilingual Support**: Supports interaction in multiple languages with dedicated models:
+- **PDF Text Extraction**: Utilizes **PyPDF2** for efficient text extraction from PDFs, handling multiple layouts and formats.
+- **Advanced Text Processing**: Integrates **tokenizers** and **Spacy** text splitters for text segmentation, and employs Spacy Language Detection module for robust language detection, ensuring precise text analysis.
+- **Multilingual Support**: Powered by multiple instances of the transformer-based large language models **Mistral-7B-Instruct-v0.2**, supports interactions in multiple languages using **Hugging Face API**:
   - **English** 🇬🇧
   - **Spanish** 🇪🇸
   - **French** 🇫🇷
@@ -70,9 +72,9 @@ python3 main.py
 ```python
 python3 main.py
 ```
-- **Step 3:** select if your PDFs is structures by Markdowns (Chapters, Titles, ...) or not
-- **Step 4:** Choose the chunk size aka the average sizes of your paragraph
-- **Step 5:** Wait & enjoy chating with your data !
+- **Step 3:** *select* if your PDFs is *structured* by Markdowns (Chapters, Titles, ...) *or not*
+- **Step 4:** Choose the chunk size *aka* the average sizes of your paragraph
+- **Step 5:** *Wait* & **enjoy chating with your data** !
 
 ## 🤝 Contributing
 
